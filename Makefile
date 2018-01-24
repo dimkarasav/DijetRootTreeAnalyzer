@@ -1,5 +1,6 @@
 COMP=g++
-FLAGS = -std=c++11 -Wno-attributes -O0 -g
+#FLAGS = -std=c++11 -Wno-attributes -O0 -g
+FLAGS = -std=c++1y -Wno-attributes -O0 -g
 #FLAGS += -DUSE_EXAMPLE
 FLAGS += -DSAVE_ALL_HISTOGRAMS 
 # FLAGS += -DCREATE_OPT_CUT_FILE
