@@ -29,25 +29,26 @@ def fixPars(w, label, doFix=True, setVal=None):
             par.setConstant(doFix)
             if setVal is not None: par.setVal(setVal)
 
-def initializeWorkspace(w,cfg,box,scaleFactor=1.,penalty=False,multi=False,x=None,emptyHist1D=None):
+def initializeWorkspace(w,cfg,box,scaleFactor=1.,penalty=False,multi=False,x=None,emptyHist1D=None):   #this function creates the datacard workspace when
+                                                                                                       #called
     
     if x is None:
-        x = array('d', cfg.getBinning(box)[0]) # mjj binning
-    nBins = len(x)-1
+        x = array('d', cfg.getBinning(box)[0]) # mjj binning - x array takes the mjj binning
+    nBins = len(x)-1                           # nBins = length of x array -1 ----> number of bins
     maxBins = nBins
     
-    variables = cfg.getVariablesRange(box, "variables",w)
-    w.var('th1x').setBins(maxBins)
-    parameters = cfg.getVariables(box, "combine_parameters")
+    variables = cfg.getVariablesRange(box, "variables",w)       #The Variable range is taken from the "variables" in the dijet.config 
+    w.var('th1x').setBins(maxBins)                              #creates(or reads) variable "th1x" inside w with bins=maxBins
+    parameters = cfg.getVariables(box, "combine_parameters")    #parameters is given as value the name of the "combine_parameters" in the config
     paramNames = []
     for parameter in parameters:
-        if penalty and '_norm' in parameter:
+        if penalty and '_norm' in parameter:                    #penalty is an argument
             continue
-        w.factory(parameter)
+        w.factory(parameter)                                    #w.factory stores the argument in the workspace --here it stores parameters (with value)
         
     constPars = ['sqrts','p0_%s'%box, 'sqrts5', 'p50_%s'%box, 'sqrtsm', 'pm0_%s'%box, 'sqrtsa', 'pa0_%s'%box]
-    if w.var('meff_%s'%box).getVal()<0 and w.var('seff_%s'%box).getVal()<0:
-        constPars.extend(['meff_%s'%box,'seff_%s'%box])
+    if w.var('meff_%s'%box).getVal()<0 and w.var('seff_%s'%box).getVal()<0:	#if the value of the meff and seff is given <0
+        constPars.extend(['meff_%s'%box,'seff_%s'%box])                         #it extends the name: eg. 'meff_PFDijet2016MC' from 'meff' only
     if  w.var('pa4_%s'%box)!=None and w.var('pa4_%s'%box).getVal()==0:
         constPars.extend(['pa4_%s'%box])
     if  w.var('pm3_%s'%box)!=None and w.var('pm3_%s'%box).getVal()==0:
@@ -159,7 +160,7 @@ def initializeWorkspace(w,cfg,box,scaleFactor=1.,penalty=False,multi=False,x=Non
     return paramNames, bkgs
 
 
-def writeDataCard(box,model,txtfileName,bkgs,paramNames,w,penalty,fixed,shapes=[],multi=False):
+def writeDataCard(box,model,txtfileName,bkgs,paramNames,w,penalty,fixed,shapes=[],multi=False):    #this function writes the datacard.txt file when called
         obsRate = w.data("data_obs").sumEntries()
         nBkgd = len(bkgs)
         rootFileName = txtfileName.replace('.txt','.root')
@@ -170,17 +171,13 @@ def writeDataCard(box,model,txtfileName,bkgs,paramNames,w,penalty,fixed,shapes=[
                 if '2015' in box:
                         lumiErrs = [1.027 for sig in model.split('p')]
                 elif '2016' in box:
-                        lumiErrs = [1.062 for sig in model.split('p')] 
-		elif '2017' in box:
-                        lumiErrs = [1.062 for sig in model.split('p')]                 
+                        lumiErrs = [1.062 for sig in model.split('p')]                  
         else:
                 rates = [w.data("%s_%s"%(box,model)).sumEntries()]
                 processes = ["%s_%s"%(box,model)]
                 if '2015' in box:
                         lumiErrs = [1.027]
                 elif '2016' in box:
-                        lumiErrs = [1.062] 
-		elif '2017' in box:
                         lumiErrs = [1.062]            
         rates.extend([w.var('Ntot_%s_%s'%(bkg,box)).getVal() for bkg in bkgs])
         processes.extend(["%s_%s"%(box,bkg) for bkg in bkgs])
@@ -256,37 +253,31 @@ def writeDataCard(box,model,txtfileName,bkgs,paramNames,w,penalty,fixed,shapes=[
         txtfile.write(datacard)
         txtfile.close()
         
-def writeDataCardMC(box,model,txtfileName,bkgs,paramNames,w):
-        obsRate = w.data("data_obs").sumEntries()
+def writeDataCardMC(box,model,txtfileName,bkgs,paramNames,w):  #this function creates the datacard.txt file when mcFile argument is given
+        obsRate = w.data("data_obs").sumEntries() #gets the Total entries of the data histo stored in w
         nBkgd = len(bkgs)
         rootFileName = txtfileName.replace('.txt','.root')
         signals = len(model.split('p'))
-        if signals>1:
-                rates = [w.data("%s_%s"%(box,sig)).sumEntries() for sig in model.split('p')]
-                processes = ["%s_%s"%(box,sig) for sig in model.split('p')]
+        if signals>1:                         #this statement is for more than 1 signal : qq, gg, qg , etc and it does the following for each signal 
+                rates = [w.data("%s_%s"%(box,sig)).sumEntries() for sig in model.split('p')]#rates=prediction's total entries                              -->"%s_%s"%(box,sig)=PFDijet2016MC_gg which is the rooFit histo of the prediction stored in the workspace
+                processes = ["%s_%s"%(box,sig) for sig in model.split('p')] #this does: processes = [PFDijet2016MC_gg]
                 if '2015' in box:
                         lumiErrs = [1.027 for sig in model.split('p')]
                 elif '2016' in box:
-                        lumiErrs = [1.062 for sig in model.split('p')]  
-		elif '2017' in box:
-                        lumiErrs = [1.062 for sig in model.split('p')]                  
-        else:
-                rates = [w.data("%s_%s"%(box,model)).sumEntries()]
+                        lumiErrs = [1.062 for sig in model.split('p')]        #number of lumi's error          
+        else:                                  #does all the above only once since there is only 1 signal 
+                rates = [w.data("%s_%s"%(box,model)).sumEntries()]#rates=prediction's total entries (rates is an array)
                 processes = ["%s_%s"%(box,model)]
                 if '2015' in box:
                         lumiErrs = [1.027]
                 elif '2016' in box:
-                        lumiErrs = [1.062]   
-		elif '2017' in box:
-                        lumiErrs = [1.062]          
-        rates.extend([w.var('Ntot_%s_%s'%(bkg,box)).getVal() for bkg in bkgs])
+                        lumiErrs = [1.062]            
+        rates.extend([w.var('Ntot_%s_%s'%(bkg,box)).getVal() for bkg in bkgs])#extends array 'rates' and stores the value of parameters with "Ntot_" name
         processes.extend(["%s_%s"%(box,bkg) for bkg in bkgs])
         if '2015' in box:
                 lumiErrs.extend([1.027 for bkg in bkgs])
         elif '2016' in box:
-                lumiErrs.extend([1.062 for bkg in bkgs])
-	elif '2017' in box:
-                lumiErrs.extend([1.062 for bkg in bkgs])
+                lumiErrs.extend([1.000 for bkg in bkgs])
         divider = "------------------------------------------------------------\n"
         datacard = "imax 1 number of channels\n" + \
                    "jmax %i number of processes minus 1\n"%(nBkgd+signals-1) + \
@@ -309,8 +300,12 @@ def writeDataCardMC(box,model,txtfileName,bkgs,paramNames,w):
             lumiString += "\t%.3f"%lumiErrs[i]
         binString+="\n"; processString+="\n"; processNumberString+="\n"; rateString +="\n"; lumiString+="\n"
         datacard+=binString+processString+processNumberString+rateString+divider
-        # now nuisances
+         #now nuisances
         datacard+=lumiString
+        #datacard += "PFDijet2016MC_bkg_stat\tgmN\t1335274\t-\t0.2918187\n"  #normal CR statistics
+        #datacard += "PFDijet2016MC_bkg_stat\tgmN\t44509\t-\t8.7545440\n"    #30 times less CR statistics
+        #datacard += "PFDijet2016MC_bkg_stat\tgmN\t6676\t-\t58.36374\n"       #200 times less CR statistics
+        datacard += "alpha\tshape\t-\t1\n"
         for shape in shapes:
             shapeString = '%s\tshape\t'%shape
             for sig in range(0,signals):
@@ -323,7 +318,7 @@ def writeDataCardMC(box,model,txtfileName,bkgs,paramNames,w):
         txtfile.write(datacard)
         txtfile.close()
 
-def convertToTh1xHist(hist):
+def convertToTh1xHist(hist):       #function  that creates a copy of the argument histo with '_th1x' added in its name
     
     hist_th1x = rt.TH1D(hist.GetName()+'_th1x',hist.GetName()+'_th1x',hist.GetNbinsX(),0,hist.GetNbinsX())
     for i in range(1,hist.GetNbinsX()+1):
@@ -341,7 +336,7 @@ def convertToMjjHist(hist_th1x,x):
 
     return hist
 
-def applyTurnonFunc(hist,effFr,w):
+def applyTurnonFunc(hist,effFr,w):  #this function returns a hist weighted with some "effFunc" taken from the workspace --only applied with 'trigger' argument and is used for the signal JES,JER uncertainties
 
     hist_turnon = hist.Clone(hist.GetName()+"_turnon")
     for p in rootTools.RootIterator.RootIterator(effFr.floatParsFinal()):
@@ -371,7 +366,7 @@ def applyTurnonGraph(hist,effGraph):
     
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':    #THIS IS THE MAIN FUNCTION WHICH  CALLS THE REST
     import BinnedFit
     parser = OptionParser()
     parser.add_option('-c','--config',dest="config",type="string",default="config/run2.config",
@@ -422,7 +417,7 @@ if __name__ == '__main__':
     
     cfg = Config.Config(options.config)
 
-    box = options.box
+    box = options.box              #box is given the 'box' argument as value --eg. PFDijet2016MC
     lumi = options.lumi
     
     signalXsec = options.xsec
@@ -430,9 +425,10 @@ if __name__ == '__main__':
     signalFileName = ''
     model = options.model
     massPoint = options.mass
-    histoName = cfg.getVariables(box, "histoName")
+    histoName = cfg.getVariables(box, "histoName")  #histoName gets as its value prediction_1GeVbin as a string -- the exact string is from config
 
     myTH1 = None
+
     for f in args:
         if f.lower().endswith('.root'):
             if f.lower().find('resonanceshapes')!=-1:
@@ -443,37 +439,39 @@ if __name__ == '__main__':
                 if histoName in names:
                     myTH1 = rootFile.Get(histoName)
                     myTH1.Print('v')
-
-    w = rt.RooWorkspace("w"+box)
+                        
+    w = rt.RooWorkspace("w"+box)       #creates a workspace with name wPFDijet2016MC
     
-    paramNames, bkgs = initializeWorkspace(w,cfg,box,scaleFactor=1,penalty=options.penalty,multi=options.multi)
+    paramNames, bkgs = initializeWorkspace(w,cfg,box,scaleFactor=1,penalty=options.penalty,multi=options.multi) #calls the function to create workspace
     
     
-    th1x = w.var('th1x')
+    th1x = w.var('th1x')               #reads the variable th1x from w
     
     if myTH1 is None:
         print "give a background root file as input"        
     
-    x = array('d', cfg.getBinning(box)[0]) # mjj binning
+    x = array('d', cfg.getBinning(box)[0]) # mjj binning   --creates array with binning according to config
         
-    myTH1.Rebin(len(x)-1,'data_obs_rebin',x)
-    myRebinnedTH1 = rt.gDirectory.Get('data_obs_rebin')
+    myTH1.Rebin(len(x)-1,'data_obs_rebin',x)    #rebins the 1GeV input histo according to x and names it 'data_obs_rebin'    
+    myRebinnedTH1 = rt.gDirectory.Get('data_obs_rebin')  #takes the rebinned histo
     myRebinnedTH1.SetDirectory(0)
-
-    myRealTH1 = convertToTh1xHist(myRebinnedTH1)
+    myRealTH1 = convertToTh1xHist(myRebinnedTH1) #stores at myRealTH1 the rebinned hist with name myRebinnedTH1_th1x(search convertToTh1xHist)
     
+   
     dataHist = None
-    if options.asimov:
+    if options.asimov:      #if asimov argument is given it replaces real data with asimov dataset from input fit result
         asimov = w.pdf('extDijetPdf').generateBinned(rt.RooArgSet(th1x),rt.RooFit.Asimov())
         asimov.SetName('data_obs')
         asimov.SetTitle('data_obs')
         dataHist = asimov
-    else:
+    else:                  #else it recreates the th1x-binned histo of the data as a rooFit histogram
         dataHist = rt.RooDataHist("data_obs", "data_obs", rt.RooArgList(th1x), rt.RooFit.Import(myRealTH1))
         #triggerData = wIn.data("triggerData")
         #rootTools.Utils.importToWS(w,triggerData)
         
-    rootTools.Utils.importToWS(w,dataHist)
+    rootTools.Utils.importToWS(w,dataHist)        #it stores the histo in the workspace
+
+    
 
     # import signal pdfs
     signalHistosOriginal = []
@@ -481,19 +479,18 @@ if __name__ == '__main__':
     signalHistos = []
     signalFile = rt.TFile.Open(signalFileName)
     names = [k.GetName() for k in signalFile.GetListOfKeys()]
-    for name in names:
+    for name in names:    #loop in the signal histograms
         d = signalFile.Get(name)
         if isinstance(d, rt.TH1):
             #d.SetDirectory(rt.gROOT)
             if name=='h_%s_%i'%(model,massPoint):
-                print "====>>> Before: ", signalXsec,lumi,d.Integral()
-                d.Scale(signalXsec*lumi)
-                print "====>>> After: ", signalXsec,lumi,d.Integral()
+                print "====>>> ", signalXsec,lumi,d.Integral()
+                d.Scale(signalXsec*lumi/d.Integral())
                 if options.trigger:
                     d_turnon = applyTurnonFunc(d,effFrIn,w)
                     name+='_turnon'
                     d = d_turnon
-                d.Rebin(len(x)-1,name+'_rebin',x)
+                d.Rebin(len(x)-1,name+'_rebin',x)   #rebins the histogram according to th1x
                 d_rebin = rt.gDirectory.Get(name+'_rebin')
                 d_rebin.SetDirectory(0)
 
@@ -503,7 +500,7 @@ if __name__ == '__main__':
                 d_th1x = convertToTh1xHist(d_rebin)
                 signalHistos.append(d_th1x)
                 
-                sigDataHist = rt.RooDataHist('%s_%s'%(box,model),'%s_%s'%(box,model), rt.RooArgList(th1x), rt.RooFit.Import(d_th1x))
+                sigDataHist = rt.RooDataHist('%s_%s'%(box,model),'%s_%s'%(box,model), rt.RooArgList(th1x), rt.RooFit.Import(d_th1x)) 
                 sigDataHist_mjj = rt.RooDataHist('%s_%s_mjj'%(box,model),'%s_%s_mjj'%(box,model), rt.RooArgList(w.var('mjj')), rt.RooFit.Import(d))
                 sigPdf_mjj = rt.RooHistPdf('pdf_%s_%s_mjj'%(box,model),'pdf_%s_%s_mjj'%(box,model), rt.RooArgSet(w.var('mjj')), sigDataHist_mjj)
                 rootTools.Utils.importToWS(w,sigDataHist)
@@ -639,8 +636,8 @@ if __name__ == '__main__':
     hUpTh1x = None
     hDownTh1x = None
     for shape in shapes:
-        if shapeFiles[shape+'Up'] is not None:
-            fUp = rt.TFile.Open(shapeFiles[shape+'Up'])
+        if shapeFiles[shape+'Up'] is not None:  #this 'if' gets the Up shapes and stores them in the workspace as RooFit histos
+            fUp = rt.TFile.Open(shapeFiles[shape+'Up'])      #reads the 'Up' signals
             if options.trigger:
                 hUp = applyTurnonFunc(fUp.Get('h_%s_%i'%(model,massPoint)),effFrIn,w)
             else:
@@ -657,7 +654,7 @@ if __name__ == '__main__':
         
             rootTools.Utils.importToWS(w,hUp_DataHist)
             
-        if shapeFiles[shape+'Down'] is not None: 
+        if shapeFiles[shape+'Down'] is not None:  ##this 'if' gets the Down shapes and stores them in the workspace as RooFit histos
             fDown = rt.TFile.Open(shapeFiles[shape+'Down'])
             if options.trigger:
                 hDown = applyTurnonFunc(fDown.Get('h_%s_%i'%(model,massPoint)),effFrIn,w)
@@ -683,26 +680,43 @@ if __name__ == '__main__':
         
             rootTools.Utils.importToWS(w,hDown_DataHist)
 
-    if options.mcFile is not None:
+    if options.mcFile is not None: #THIS IS USED FOR THE RATIO-PREDICTION
         bkgs = ['bkg']
-        mcFile = rt.TFile.Open(options.mcFile,'read')        
-        mcName = cfg.getVariables(box, "mcName")
-        mcHist = mcFile.Get(mcName)        
-        mcHist.Rebin(len(x)-1,'mc_rebin',x)
-        mcHist_rebin = rt.gDirectory.Get('mc_rebin')
-        mcHist_th1x = convertToTh1xHist(mcHist_rebin)
-        mcDataHist = rt.RooDataHist('%s_%s'%(box,'bkg'),'%s_%s'%(box,'bkg'), rt.RooArgList(th1x), rt.RooFit.Import(mcHist_th1x))
+        mcFile = rt.TFile.Open(options.mcFile,'read')   #reads the .root file with the prediction
+        mcName = cfg.getVariables(box, "mcName")        #gets the name 'h_mjj_prediction_1GeVbin' as string
+        mcHist = mcFile.Get(mcName)                     #gets the prediction histo
+        mcHist.Rebin(len(x)-1,'mc_rebin',x)             #Rebins the prediction according to th1x
+        mcHist_rebin = rt.gDirectory.Get('mc_rebin')    #gets the rebinned histo
+        mcHist_th1x = convertToTh1xHist(mcHist_rebin)   #calls a function to get the rebinned histo with '_th1x' added in name (search convertToTh1xHist)
+        mcDataHist = rt.RooDataHist('%s_%s'%(box,'bkg'),'%s_%s'%(box,'bkg'), rt.RooArgList(th1x), rt.RooFit.Import(mcHist_th1x)) #recreates the prediction as rooFit histo
         mcDataHist_mjj = rt.RooDataHist('%s_%s_mjj'%(box,'bkg'),'%s_%s_mjj'%(box,'bkg'), rt.RooArgList(w.var('mjj')), rt.RooFit.Import(mcHist))
         rootTools.Utils.importToWS(w,mcDataHist)
         rootTools.Utils.importToWS(w,mcDataHist_mjj)
 
+        myTH1predUp = mcFile.Get('h_mjj_prediction_1GeVbin_plus_sigma')
+        myTH1predUp.Print('v')
+        myTH1predDown = mcFile.Get('h_mjj_prediction_1GeVbin_minus_sigma')
+        
+        myTH1predUp.Rebin(len(x)-1,'pred_Up_rebin',x)
+        myRebinnedTH1predUp = rt.gDirectory.Get('pred_Up_rebin')
+        myRebinnedTH1predUp.SetDirectory(0)
+        myRealTH1predUp = convertToTh1xHist(myRebinnedTH1predUp)
+        predHistUp = rt.RooDataHist("PFDijet2016MC_bkg_alphaUp", "PFDijet2016MC_bkg_alphaUp", rt.RooArgList(th1x), rt.RooFit.Import(myRealTH1predUp))
+        rootTools.Utils.importToWS(w,predHistUp) 
+
+        myTH1predDown.Rebin(len(x)-1,'pred_Down_rebin',x)
+        myRebinnedTH1predDown = rt.gDirectory.Get('pred_Down_rebin')
+        myRebinnedTH1predDown.SetDirectory(0)
+        myRealTH1predDown = convertToTh1xHist(myRebinnedTH1predDown)
+        predHistDown = rt.RooDataHist("PFDijet2016MC_bkg_alphaDown", "PFDijet2016MC_bkg_alphaDown", rt.RooArgList(th1x), rt.RooFit.Import(myRealTH1predDown))
+        rootTools.Utils.importToWS(w,predHistDown) 
  
-    outFile = 'dijet_combine_%s_%i_lumi-%.3f_%s.root'%(model,massPoint,lumi/1000.,box)
-    outputFile = rt.TFile.Open(options.outDir+"/"+outFile,"recreate")
+    outFile = 'dijet_combine_%s_%i_lumi-%.3f_%s.root'%(model,massPoint,lumi/1000.,box) #creates the name of the output .root file
+    outputFile = rt.TFile.Open(options.outDir+"/"+outFile,"recreate")                  #creates the output file
     if options.mcFile is not None:
         writeDataCardMC(box,model,options.outDir+"/"+outFile.replace(".root",".txt"),bkgs,paramNames,w)
     else:
         writeDataCard(box,model,options.outDir+"/"+outFile.replace(".root",".txt"),bkgs,paramNames,w,options.penalty,options.fixed,shapes=shapes,multi=options.multi)
-    w.Write()
+    w.Write() #writes the workspace in the output file
     w.Print('v')
     os.system("cat %s"%options.outDir+"/"+outFile.replace(".root",".txt"))

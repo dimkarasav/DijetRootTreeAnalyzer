@@ -8,7 +8,7 @@ import glob
 import rootTools
 import time
 
-NSIGMA = 10.0
+NSIGMA = 0.01
 
 def massIterable(massList):    
     if len(massList.split(','))==1:
@@ -193,8 +193,11 @@ def main(options,args):
                 signalSys  =   '--jesUp inputs/ResonanceShapes_%s_13TeV_CaloScouting_Spring16_JESUP.root --jesDown inputs/ResonanceShapes_%s_13TeV_CaloScouting_Spring16_JESDOWN.root'%(model,model)
                 signalSys += ' --jerUp inputs/ResonanceShapes_%s_13TeV_CaloScouting_Spring16_JERUP.root --jerDown inputs/ResonanceShapes_%s_13TeV_CaloScouting_Spring16_JERDOWN.root'%(model,model)
             elif box=='PFDijet2016':
-                signalSys  =   '--jesUp inputs/ResonanceShapes_%s_13TeV_Spring16_JESUP.root --jesDown inputs/ResonanceShapes_%s_13TeV_Spring16_JESDOWN.root'%(model,model)
-                signalSys += ' --jerUp inputs/ResonanceShapes_%s_13TeV_Spring16_JERUP.root'%(model)
+                #signalSys  =   '--jesUp inputs/ResonanceShapes_%s_13TeV_Spring16_JESUP.root --jesDown inputs/ResonanceShapes_%s_13TeV_Spring16_JESDOWN.root'%(model,model)
+                signalSys  =   '--jesUp inputs/ResonanceShapes_%s_13TeV_Spring16_JESUP_W-0p3.root --jesDown inputs/ResonanceShapes_%s_13TeV_Spring16_JESDOWN_W-0p3.root'%(model,model)
+                #signalSys += ' --jerUp inputs/ResonanceShapes_%s_13TeV_Spring16_JERUP.root'%(model)
+                #signalSys += ' --jerUp inputs/ResonanceShapes_%s_13TeV_Spring16_JERUP_W-0p01.root'%(model)
+                signalSys += ' --jerUp inputs/ResonanceShapes_%s_13TeV_Spring16_JERUP_W-0p3.root --jerDown inputs/ResonanceShapes_%s_13TeV_Spring16_JERDOWN_W-0p3.root'%(model,model)
         
         penaltyString = ''
         if options.penalty:
@@ -210,7 +213,8 @@ def main(options,args):
         elif box=='CaloDijet2016':
             signalDsName = 'inputs/ResonanceShapes_%s_13TeV_CaloScouting_Spring16.root'%model
         elif box=='PFDijet2016':
-            signalDsName = 'inputs/ResonanceShapes_%s_13TeV_Spring16.root'%model
+            #signalDsName = 'inputs/ResonanceShapes_%s_13TeV_Spring16.root'%model
+            signalDsName = 'inputs/ResonanceShapes_%s_13TeV_Spring16_W-0p3.root'%model
         elif 'PFDijetbb2016' in box:
             signalDsName = 'inputs/ResonanceShapes_%s_bb_13TeV_Spring16.root'%model
             
@@ -219,13 +223,13 @@ def main(options,args):
                             'CaloDijet2016':'inputs/data_CaloScoutingHT_Run2016BCDEFG_BiasCorrected_Mjj300_Golden27637pb_CaloDijet2016.root',
                             #'PFDijet2016':'inputs/data_PFRECOHT_Run2016BCD_Golden12910pb_PFDijet2016.root',
                             'CaloDijet20152016':'inputs/data_CaloScoutingHT_Run2015D2016B_CaloDijet20152016.root',
-                            'PFDijet2016':'inputs/JetHT_run2016_moriond17_red_cert_v2.root',
-                            'PFDijetbb20160mt':'inputs/JetHT_run2016_moriond17_red_cert_v2.root',
-                            'PFDijetbb20161mt':'inputs/JetHT_run2016_moriond17_red_cert_v2.root',
-                            'PFDijetbb20162mt':'inputs/JetHT_run2016_moriond17_red_cert_v2.root',
-                            'PFDijetbb20160mm':'inputs/JetHT_run2016_moriond17_red_cert_v2.root',
-                            'PFDijetbb20161mm':'inputs/JetHT_run2016_moriond17_red_cert_v2.root',
-                            'PFDijetbb20162mm':'inputs/JetHT_run2016_moriond17_red_cert_v2.root'
+                            'PFDijet2016':'inputs/data_Run2016BToH_Golden36400pb_PFDijet2016_ReRecoJEC_V1.root',
+                            'PFDijetbb20160mt':'inputs/moriond16_v1_36fb_jsonFix.root',
+                            'PFDijetbb20161mt':'inputs/moriond16_v1_36fb_jsonFix.root',
+                            'PFDijetbb20162mt':'inputs/moriond16_v1_36fb_jsonFix.root',
+                            'PFDijetbb20160mm':'inputs/moriond16_v1_36fb_jsonFix.root',
+                            'PFDijetbb20161mm':'inputs/moriond16_v1_36fb_jsonFix.root',
+                            'PFDijetbb20162mm':'inputs/moriond16_v1_36fb_jsonFix.root'
                             }
 
         blindString = ''

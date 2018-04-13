@@ -646,6 +646,7 @@ if __name__ == '__main__':
         legThyModel.SetTextFont(42)
         legThyModel.SetFillColor(rt.kWhite)
         legThyModel.SetLineColor(rt.kWhite)
+	legThyModel.SetFillStyle(0)
         legThyModel.SetFillColorAlpha(0,0)
         legThyModel.SetLineColorAlpha(0,0)
         
@@ -662,7 +663,7 @@ if __name__ == '__main__':
                     pass
             else:
                 legThyModel.AddEntry(xsec_gr_nom[thyModel], legendLabel[thyModel],'l')
-        legThyModel.Draw("same")
+        legThyModel.Draw("same")     #this plots the gray line
         try:
             legThyModel2.Draw("same")
         except:
@@ -682,8 +683,8 @@ if __name__ == '__main__':
 
 
     if 'PF' in Box or options.massMax>1600:
-        h_limit.GetXaxis().SetTitle('Resonance mass [TeV]')
-        h_limit.GetXaxis().SetLabelOffset(1000)
+        h_limit.GetXaxis().SetTitle('Resonance mass [GeV]')
+        #h_limit.GetXaxis().SetLabelOffset(1000)
         #h_fit_residual_vs_mass.GetXaxis().SetNoExponent()
         #h_fit_residual_vs_mass.GetXaxis().SetMoreLogLabels()    
         xLab = rt.TLatex()
@@ -692,7 +693,8 @@ if __name__ == '__main__':
         xLab.SetTextFont(42)
         xLab.SetTextSize(0.05)
         if options.doSignificance:
-            yOffset = -0.138
+            yOffset = -1000
+            #yOffset = -0.138
         else:
             #yOffset = 6.5e-5 # for 1e-4 min
             #yOffset = 5.25e-6 # for 1e-5 min
@@ -710,7 +712,7 @@ if __name__ == '__main__':
         line1.SetLineStyle(2)
         line1.SetLineWidth(2)
         line1.SetLineColor(rt.kGray+1)
-        line1.Draw()
+        #line1.Draw()
         #line2 = rt.TLine(1600,1e-1,1600,2)
         #line2.SetLineStyle(2)
         #line2.SetLineWidth(2)
@@ -737,25 +739,33 @@ if __name__ == '__main__':
     c.RedrawAxis() # request from David
     if options.doSignificance:
         c.SaveAs(options.outDir+"/signif_"+options.model+"_"+options.box.lower()+".pdf")
+        c.SaveAs(options.outDir+"/signif_"+options.model+"_"+options.box.lower()+".png")
         c.SaveAs(options.outDir+"/signif_"+options.model+"_"+options.box.lower()+".C")
     else:
         if options.bayes:
             if options.noSys:
                 c.SaveAs(options.outDir+"/limits_bayes_nosys_"+options.model+"_"+options.box.lower()+".pdf")
+                c.SaveAs(options.outDir+"/limits_bayes_nosys_"+options.model+"_"+options.box.lower()+".png")
                 c.SaveAs(options.outDir+"/limits_bayes_nosys_"+options.model+"_"+options.box.lower()+".C")
             else:
                 c.SaveAs(options.outDir+"/limits_bayes_"+options.model+"_"+options.box.lower()+".pdf")
+                c.SaveAs(options.outDir+"/limits_bayes_"+options.model+"_"+options.box.lower()+".png")
                 c.SaveAs(options.outDir+"/limits_bayes_"+options.model+"_"+options.box.lower()+".C")
         else:
             if options.noSys:
                 c.SaveAs(options.outDir+"/limits_freq_nosys_"+options.model+"_"+options.box.lower()+".pdf")
+                c.SaveAs(options.outDir+"/limits_freq_nosys_"+options.model+"_"+options.box.lower()+".png")
                 c.SaveAs(options.outDir+"/limits_freq_nosys_"+options.model+"_"+options.box.lower()+".C")
             else:
                 c.SaveAs(options.outDir+"/limits_freq_"+options.model+"_"+options.box.lower()+".pdf")
+                c.SaveAs(options.outDir+"/limits_freq_"+options.model+"_"+options.box.lower()+".png")
                 c.SaveAs(options.outDir+"/limits_freq_"+options.model+"_"+options.box.lower()+".C")
                 outFile = rt.TFile.Open(options.outDir+"/limits_freq_"+options.model+"_"+options.box.lower()+".root","recreate")
                 outFile.cd()
                 c.Write()
+		for thyModel in thyModelsToDraw: 
+			xsec_gr_nom[thyModel].SetName('%s'%(thyModel))
+			xsec_gr_nom[thyModel].Write()
                 graphDict = {}
                 graphDict['obs'] = gr_observedLimit
                 graphDict['exp'] = gr_expectedLimit

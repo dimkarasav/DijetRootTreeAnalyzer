@@ -565,13 +565,19 @@ if __name__ == '__main__':
 
         
     rss = 0
+    fit_integral = 0
+    data_integral= 0
     for i in range(0,len(x)-1):
         th1x.setVal(i+0.5)
         predYield = asimov.weight(rt.RooArgSet(th1x))
         dataYield = dataHist_reduce.weight(rt.RooArgSet(th1x))
         rss += float(predYield-dataYield) * float(predYield-dataYield)
         print "%i <= mjj < %i; prediction: %.2f; data %i"  % (x[i],x[i+1],predYield,dataYield)
+	fit_integral += predYield
+	data_integral+= dataYield
     print "RSS = ", rss 
+    print " Fit Integral = " , fit_integral 
+    print " Data Integral = " , data_integral 
         
     rt.TH1D.SetDefaultSumw2()
     
@@ -1224,11 +1230,12 @@ if __name__ == '__main__':
         sigHistResidual.SetLineWidth(2)
         sigHistResidual.SetLineStyle(style)
         for bin in range (0,g_data.GetN()):
+	    #print g_data.GetN()
+	    print 'LALALALALALALA'
             value_data = g_data.GetY()[bin]
             err_tot_data = g_data.GetEYhigh()[bin]
             binWidth = g_data.GetEXlow()[i] + g_data.GetEXhigh()[i]
             value_signal = sigHist.GetBinContent(bin+1)/(binWidth*lumi)
-        
             ## Signal residuals
             if err_tot_data>0:                
                 sig_residual = (value_signal) / err_tot_data
@@ -1243,6 +1250,7 @@ if __name__ == '__main__':
         g_signal_residual.SetLineColor(color)
         g_signal_residual.SetLineWidth(3)
         g_signal_residual.SetLineStyle(style)
+	print g_signal_residual.GetN()
 
         lastX = 0
         lastY = 0
@@ -1278,6 +1286,7 @@ if __name__ == '__main__':
     #c.RedrawAxis() # request from David
     
     c.Print(options.outDir+"/fit_mjj_%s_%s.pdf"%(fitRegion.replace(',','_'),box))
+    c.Print(options.outDir+"/fit_mjj_%s_%s.png"%(fitRegion.replace(',','_'),box))
     c.Print(options.outDir+"/fit_mjj_%s_%s.C"%(fitRegion.replace(',','_'),box))
     tdirectory.cd()
     c.Write()

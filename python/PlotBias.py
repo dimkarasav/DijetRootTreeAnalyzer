@@ -242,7 +242,8 @@ if __name__ == '__main__':
         
         h_bias = getBiasHistos('(mu-%.3f)/((muLoErr+muHiErr)/2.)'%rDict[int(massPoint)],toyTree)
         h_bias_divr = getBiasDivRHistos('(mu-%.3f)/(%.3f)'%(rDict[int(massPoint)],rDict[int(massPoint)]),toyTree)
-        
+        print rDict[int(massPoint)]
+        print 'THIS WAS IT'
         
         gaus_func = rt.TF1("gaus_func","gaus(0)",-4,4)
         #gaus_func.SetParameter(0,100)
