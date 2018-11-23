@@ -1,5 +1,5 @@
 COMP=g++
-FLAGS = -std=c++1y -Wno-attributes -O0 -g
+FLAGS = -std=c++17 -Wno-attributes -O0 -g
 #FLAGS += -DUSE_EXAMPLE
 FLAGS += -DSAVE_ALL_HISTOGRAMS 
 # FLAGS += -DCREATE_OPT_CUT_FILE
@@ -10,8 +10,9 @@ ROOTINC= -I${ROOTSYS}/include
 LIBS= -L.  ${ROOTLIBS} -L${CLHEP}/lib
 SRC= ./src
 
-SELECTIONLIB=$(SRC)/rootNtupleClass.o $(SRC)/baseClass.o $(SRC)/analysisClass.o  /cvmfs/cms.cern.ch/slc6_amd64_gcc630/cms/cmssw/CMSSW_9_4_0/lib/slc6_amd64_gcc630/libCondFormatsBTauObjects.so /cvmfs/cms.cern.ch/slc6_amd64_gcc630/cms/cmssw/CMSSW_9_4_0/lib/slc6_amd64_gcc630/libCondToolsBTau.so /cvmfs/cms.cern.ch/slc6_amd64_gcc630/cms/cmssw/CMSSW_9_4_0/lib/slc6_amd64_gcc630/libCondFormatsJetMETObjects.so /cvmfs/cms.cern.ch/slc6_amd64_gcc630/cms/cmssw/CMSSW_9_4_0/lib/slc6_amd64_gcc630/libFWCoreMessageLogger.so $(SRC)/jsonParser.o $(SRC)/pileupReweighter.o $(SRC)/qcdFitter.o $(SRC)/qcdFitter_V1.o  $(SRC)/likelihoodGetter.o $(SRC)/eventListHelper.o $(SRC)/IOV.o
+SELECTIONLIB=$(SRC)/rootNtupleClass.o $(SRC)/baseClass.o $(SRC)/analysisClass.o ${CMSSW_RELEASE_BASE}/lib/${SCRAM_ARCH}/libCondFormatsBTauObjects.so ${CMSSW_RELEASE_BASE}/lib/${SCRAM_ARCH}/libCondToolsBTau.so ${CMSSW_RELEASE_BASE}/lib/${SCRAM_ARCH}/libCondFormatsJetMETObjects.so ${CMSSW_RELEASE_BASE}/lib/${SCRAM_ARCH}/libFWCoreMessageLogger.so $(SRC)/jsonParser.o $(SRC)/pileupReweighter.o $(SRC)/qcdFitter.o $(SRC)/qcdFitter_V1.o  $(SRC)/likelihoodGetter.o $(SRC)/eventListHelper.o $(SRC)/IOV.o
 EXE = main
+
 
 # ********** TEMPLATE *************
 # mainProg: mainProg.o $(SELECTIONLIB)
