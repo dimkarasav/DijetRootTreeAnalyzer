@@ -1,0 +1,36 @@
+hadd input_jetsij/ResonanceShapes_qq_13TeV_CaloScouting_2016.root \
+input_jets01/ResonanceShapes_qq_13TeV_CaloScouting_2016.root \
+input_jets02/ResonanceShapes_qq_13TeV_CaloScouting_2016.root \
+input_jets12/ResonanceShapes_qq_13TeV_CaloScouting_2016.root
+
+hadd input_jetsij/ResonanceShapes_qq_13TeV_CaloScouting_2016_JERDOWN.root \
+input_jets01/ResonanceShapes_qq_13TeV_CaloScouting_2016_JERDOWN.root \
+input_jets02/ResonanceShapes_qq_13TeV_CaloScouting_2016_JERDOWN.root \
+input_jets12/ResonanceShapes_qq_13TeV_CaloScouting_2016_JERDOWN.root
+
+hadd input_jetsij/ResonanceShapes_qq_13TeV_CaloScouting_2016_JERUP.root \
+input_jets01/ResonanceShapes_qq_13TeV_CaloScouting_2016_JERUP.root \
+input_jets02/ResonanceShapes_qq_13TeV_CaloScouting_2016_JERUP.root \
+input_jets12/ResonanceShapes_qq_13TeV_CaloScouting_2016_JERUP.root
+
+hadd input_jetsij/ResonanceShapes_qq_13TeV_CaloScouting_2016_JESDOWN.root \
+input_jets01/ResonanceShapes_qq_13TeV_CaloScouting_2016_JESDOWN.root \
+input_jets02/ResonanceShapes_qq_13TeV_CaloScouting_2016_JESDOWN.root \
+input_jets12/ResonanceShapes_qq_13TeV_CaloScouting_2016_JESDOWN.root
+
+hadd input_jetsij/ResonanceShapes_qq_13TeV_CaloScouting_2016_JESUP.root \
+input_jets01/ResonanceShapes_qq_13TeV_CaloScouting_2016_JESUP.root \
+input_jets02/ResonanceShapes_qq_13TeV_CaloScouting_2016_JESUP.root \
+input_jets12/ResonanceShapes_qq_13TeV_CaloScouting_2016_JESUP.root
+
+hadd input_jetsij/ResonanceShapes_qq_13TeV_CaloScouting_2016.root \
+input_jets01/ResonanceShapes_qq_13TeV_CaloScouting_2016.root \
+input_jets02/ResonanceShapes_qq_13TeV_CaloScouting_2016.root \
+input_jets12/ResonanceShapes_qq_13TeV_CaloScouting_2016.root
+
+hadd input_jetsij/full.root \
+input_jets01/full.root \
+input_jets02/full.root \
+input_jets12/full.root
+
+

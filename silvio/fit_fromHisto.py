@@ -11,23 +11,23 @@ ROOT.gStyle.SetOptFit(1111)
 
 varX_min,  varX_max = 100,1000
 #fitX_min,  fitX_max = 280,700
-fitX_min,  fitX_max = 200,900
+fitX_min,  fitX_max = 250,900
 
 
 massBoundaries = [1, 3, 6, 10, 16, 23, 31, 40, 50, 61, 74, 88, 103, 119, 137, 156, 176, 197, 220, 244, 270, 296, 325, 354, 386, 419, 453, 489, 526, 565, 606, 649, 693, 740, 788, 838,  890, 944, 1000, 1058, 1118, 1181, 1246, 1313, 1383, 1455, 1530, 1607, 1687, 1770, 1856, 1945, 2037, 2132, 2231, 2332, 2438, 2546, 2659, 2775, 2895, 3019, 3147, 3279, 3416, 3558, 3704, 3854, 4010, 4171, 4337, 4509, 4686, 4869, 5058, 5253, 5455, 5663, 5877, 6099, 6328, 6564, 6808,  7060, 7320, 7589, 7866, 8152, 8447, 8752, 9067, 9391, 9726, 10072, 10430, 10798, 11179, 11571, 11977, 12395, 12827, 13272, 13732, 14000]
-massBoundaries = [i*10 for i in range(1000)]
+#massBoundaries = [i*10 for i in range(1000)]
 
 histoNames = [
 #    "dijetMassHisto_isrptcut_50",
 #    "dijetMassHisto_isrptcut_40_50",
-    "dijetMassHisto_isrptcut_50_60",
+#    "dijetMassHisto_isrptcut_50_60",
 #    "dijetMassHisto_isrptcut_60_70",
 
 #    "dijetMassHisto_isrptcut_70_80",
 #    "dijetMassHisto_isrptcut_80_90",
 #    "dijetMassHisto_isrptcut_90_100",
 #    "dijetMassHisto_isrptcut_100_150",
-#    "dijetMassHisto_isrptcut_150_200",
+    "dijetMassHisto_isrptcut_150_200",
 #    "dijetMassHisto_isrptcut_200_300",
 #    "dijetMassHisto_isrptcut_300",
 ]
@@ -87,7 +87,11 @@ print(fitX_min,fitX_max)
 
 #function = "exp([0]) / pow(x + [2] , 5 + [3] * log(x/13000) ) / ( exp([1]/(x+[3])) - 1) * (1+TMath::Erf((x - [4])/[5]))"
 #function = "exp([0]) / pow(x + [2] , 5 + [3] * log(x/13000) ) / ( exp([1]/(x+[3])) - 1) * (1 - exp(-(x - [4])/[5]))"
-function = "TMath::Exp([0]) / TMath::Power(x + [2] , 5 + [3] * TMath::Log(x/13000) ) / ( TMath::Exp([1]/(x+[3])) - 1) * (TMath::Cos(TMath::ASin(2*[5]/ TMath::Max((x-[4]),20.) )))"
+#function = "TMath::Exp([0]) / TMath::Power(x + [2] , 5 + [3] * TMath::Log(x/13000) ) / ( TMath::Exp([1]/(x+[3])) - 1) * (TMath::Cos(TMath::ASin(2*[5]/ TMath::Max((x-[4]),20.) )))"
+
+function = "exp([0])*exp(-[2]*(x/13000))/pow(x/13000,[1])  * (1. - [4]/TMath::Max((x-[3]),1.))"
+#function = "exp([0])*exp(-[2]*(x/13000)-[3]*pow(x/13000,2))/pow(x/13000,[1]) * (1. - [5]/TMath::Max((x-[4]),1.))"
+
 
 #(cos(asin(2*[4]/(x-[5]) * (x>[5]))))
 
@@ -102,8 +106,15 @@ Npar = funct.GetNpar()
 
 #funct.SetParameters(20,10,20,1,-2000,50)
 
-#funct.SetParameters(100,0.1,100,-1000,5000) ## for exp([0])*exp(-[2]*(x/13000)-[3]*pow(x/13000,2))/pow(x/13000,[1])
-funct.SetParameters(20,100,-10,1)
+funct.SetParameters(
+-2.82676e+00,
+4.49891e+00,
+1.59588e+01,
+-1.18618e+02,
+2.79225e+02) ## for exp([0])*exp(-[2]*(x/13000))/pow(x/13000,[1])  * (1. - [4]/TMath::Max((x-[3]),1.))
+
+
+
 
 #function = "exp([0]) / pow(x + [2] , 5 + [3] * log(x/13000) ) / ( exp([1]/(x+[3])) - 1) * (1 - exp(-(x - [4])/[5]))"
    #1  p0           1.89567e+01   9.79767e-03   0.00000e+00   6.70051e-03
@@ -239,7 +250,7 @@ ROOT.gStyle.SetOptStat(0)
 #fileName = "/mnt/t3nfs01/data01/shome/dbrzhech/DijetScouting/CMSSW_7_4_14/src/CMSDIJET/DijetRootTreeAnalyzer/inputs/full.root"
 #fileName = "/mnt/t3nfs01/data01/shome/sdonato/scratch/scouting/histoCaloJet40.root"
 #fileName = "new4.root"
-fileName = "../inputs/full.root"
+fileName = "inputs/full.root"
 
 
 redoPlot = False
@@ -259,7 +270,7 @@ if redoPlot:
 else:
     file_ = ROOT.TFile.Open(fileName)
     try:
-        histoOrig = file_.Get("DijetFilter/dijetMassHisto/dijetMassHisto_isrptcut_50").Clone("histoOrig")
+        histoOrig = file_.Get("DijetFilter/dijetMassHisto/dijetMassHisto_isrptcut_80_90").Clone("histoOrig")
     except:
         pass
         #histoOrig = file_.Get("DijetFilter/dijetMassHisto/dijetMassHisto_isrptcut_50_60").Clone("histoOrig")

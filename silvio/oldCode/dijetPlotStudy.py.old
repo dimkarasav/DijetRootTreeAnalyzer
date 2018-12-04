@@ -1,0 +1,48 @@
+import ROOT
+
+# ROOT.gROOT.SetBatch(0)
+# canv2 = ROOT.TCanvas()
+
+ROOT.gStyle.SetOptStat(0)
+ROOT.gROOT.SetBatch(1)
+canv = ROOT.TCanvas()
+canv.SetGridx()
+canv.SetGridy()
+
+fileNames = [
+#    "../output/test_reduced_skim_cosine.root",
+#    "../output/test_reduced_skim_cosine3D.root",
+#    "../output/test_reduced_skim_dijetpt.root",
+#    "../output/test_reduced_skim_leading23jets.root",
+#    "../output/test_reduced_skim_leading2jets.root",
+#    "../output/test_reduced_skim_vect.root",
+
+    #"../output/test_reduced_skim_500_cosine3D.root",
+    #"../output/test_reduced_skim_500_dijetpt.root",
+    #"../output/test_reduced_skim_500_leading2jets.root",
+    #"../output/test_reduced_skim_500_vect.root",
+
+    "../output/test_reduced_skim_75_cosine3D.root",
+    "../output/test_reduced_skim_75_cross.root",
+    "../output/test_reduced_skim_75_dijetpt.root",
+    "../output/test_reduced_skim_75_leading2jets.root",
+
+]
+
+def getHisto(fileName):
+    name = fileName.replace(".root","")
+    name = name.replace("test_reduced_skim_","")
+    file_ = ROOT.TFile(fileName)
+    tree = file_.Get("rootTupleTree/tree")
+    tree.Draw("abs(dijetMCreco_mass-dijet_mass)<1E-3:dijetMC_pt >> fraction(100,0,500)","htAK4>300","prof")
+    fraction = ROOT.gDirectory.Get("fraction")
+    fraction.SetMaximum(1)
+    fraction.SetMinimum(0)
+    fraction.SetName(name)
+    canv.SaveAs(fraction.GetName()+".png")
+    canv.SaveAs(fraction.GetName()+".root")
+    canv.SaveAs(fraction.GetName()+".C")
+    file_.Close()
+
+for fileName in fileNames:
+    getHisto(fileName)

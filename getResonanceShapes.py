@@ -19,9 +19,9 @@ class ShapeStorage:
         nbins.append(len(self.binxcenters))
         for key in self.shapes.keys():
             norm = sum(self.shapes[key])
-            if abs(norm - 1.) > 0.01:
-                print "** ERROR: ** Input shape for m =", key, "GeV not normalized. Make sure the input shapes are normalized to unity. Aborting."
-                sys.exit(3)
+#            if abs(norm - 1.) > 0.01:
+#                print "** ERROR: ** Input shape for m =", key, "GeV not normalized. Make sure the input shapes are normalized to unity. Aborting."
+#                sys.exit(3)
             nbins.append(len(self.shapes[key]))
         if len(set(nbins)) > 1:
            print "** ERROR: ** Numbers of bins for different input shapes and the number of bin centers are not all identical. Aborting."
@@ -69,7 +69,7 @@ def LineShapePDF(shapes, mass, histo):
     interpolator = Math.Interpolator(len(x))
     interpolator.SetData(len(x), array('d',x), array('d',y.tolist()))
 
-    for i in range(1, histo.GetNbinsX()+1):
+    for i in range(0, histo.GetNbinsX()+1):
         xcenter = histo.GetBinCenter(i)/float(mass)
         if xcenter > shapes.binxcenters[0] and xcenter < shapes.binxcenters[-1]:
 
@@ -83,7 +83,8 @@ def LineShapePDF(shapes, mass, histo):
         else:
             histo.SetBinContent(i, 0.)
 
-    histo.Scale( 1./histo.Integral() )
+#    histo.Scale( 1./histo.Integral() )
+    histo.Scale( sum(y)/histo.Integral() )
 
 
 def main():

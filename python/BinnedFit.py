@@ -21,6 +21,8 @@ def binnedFit(pdf, data, fitRange='Full',useWeight=False):
     else:
         nll = pdf.createNLL(data,rt.RooFit.Range(fitRange),rt.RooFit.Extended(True),rt.RooFit.Offset(True))
         m2 = rt.RooMinimizer(nll)
+        m2.setPrintLevel(0)
+        m2.setPrintEvalErrors(0)
         m2.setStrategy(2)
         m2.setMaxFunctionCalls(100000 * 10000)
         m2.setMaxIterations(100000 * 10000)
@@ -660,7 +662,7 @@ if __name__ == '__main__':
         histo.Draw()
         #histo.GetXaxis().SetRangeUser(w.var('mjj').getMin('Eff'),w.var('mjj').getMax('Eff'))
         if options.l1Trigger:
-            histo.GetXaxis().SetRangeUser(w.var('mjj').getMin('Eff'),x[15])
+            histo.aetXaxis().SetRangeUser(w.var('mjj').getMin('Eff'),x[15])
         else:
             #histo.GetXaxis().SetRangeUser(w.var('mjj').getMin('Eff'),x[7])
             histo.GetXaxis().SetRangeUser(w.var('mjj').getMin('Eff'),x[-1])
@@ -762,7 +764,7 @@ if __name__ == '__main__':
         list_chi2AndNdf_background = calculateChi2AndFillResiduals(effGraph_coarse,h_eff,h_eff_residual_vs_mass,w,0,True)
 
         if options.l1Trigger:
-            h_eff_residual_vs_mass.GetXaxis().SetRangeUser(w.var('mjj').getMin('Eff'),x[15])
+            h_eff_residual_vs_mass.GetXaxis().SetRangeUser(w.var('mjj').getMin('Eff'),x[5])
         else:
             #h_eff_residual_vs_mass.GetXaxis().SetRangeUser(w.var('mjj').getMin('Eff'),x[7])
             h_eff_residual_vs_mass.GetXaxis().SetRangeUser(w.var('mjj').getMin('Eff'),x[-1])
@@ -915,7 +917,7 @@ if __name__ == '__main__':
         else:
             myRebinnedDensityTH1.SetMinimum(2e-5)
     elif 'CaloTrijet' in box:
-        myRebinnedDensityTH1.SetMaximum(2e3)
+        myRebinnedDensityTH1.SetMaximum(2e4)
         myRebinnedDensityTH1.SetMinimum(2e-5)
     myRebinnedDensityTH1.Draw("axis")
 
@@ -942,7 +944,7 @@ if __name__ == '__main__':
         for i in range(0,g_signal.GetN()):
             N = g_signal.GetY()[i]
             binWidth = g_signal.GetEXlow()[i] + g_signal.GetEXhigh()[i]
-            if g_signal.GetX()[i]>float(mass)*0.75 and notSet:
+            if g_signal.GetX()[i]>float(mass)*0.1 and notSet:
                 firstX = g_signal.GetX()[i]
                 firstY = N/(binWidth * lumi)
                 notSet = False
@@ -950,13 +952,13 @@ if __name__ == '__main__':
         for i in range(0,g_signal.GetN()):
             N = g_signal.GetY()[i]
             binWidth = g_signal.GetEXlow()[i] + g_signal.GetEXhigh()[i]
-            if g_signal.GetX()[i]<=float(mass)*0.75:
+            if g_signal.GetX()[i]<=float(mass)*0.1:
                 g_signal.SetPoint(i,firstX,firstY)
             else:
                 g_signal.SetPoint(i, g_signal.GetX()[i], N/(binWidth * lumi))
             g_signal.SetPointEYlow(i, 0)
             g_signal.SetPointEYhigh(i, 0)
-            if g_signal.GetX()[i]>float(mass)*1.25:
+            if g_signal.GetX()[i]>float(mass)*3.5:
                 g_signal.SetPoint(i,lastX,lastY)
             else:
                 lastX = g_signal.GetX()[i]
@@ -1023,6 +1025,7 @@ if __name__ == '__main__':
     pave_sel.SetTextFont(42)
     pave_sel.SetTextSize(0.045)
     pave_sel.SetTextAlign(11)
+    print("Chi2: %s"%list_chi2AndNdf_background[4])
     pave_sel.AddText("#chi^{{2}} / NDF = {0:.1f} / {1:d} = {2:.1f}".format(
                           list_chi2AndNdf_background[4], list_chi2AndNdf_background[5],
                           list_chi2AndNdf_background[4]/list_chi2AndNdf_background[5]))
@@ -1309,7 +1312,7 @@ if __name__ == '__main__':
         for i in range(0,g_signal_residual.GetN()):
             N = g_signal_residual.GetY()[i]
             binWidth = g_signal_residual.GetEXlow()[i] + g_signal_residual.GetEXhigh()[i]
-            if g_signal_residual.GetX()[i]>float(mass)*0.75 and notSet:
+            if g_signal_residual.GetX()[i]>float(mass)*0.5 and notSet:
                 firstX = g_signal_residual.GetX()[i]
                 firstY = N
                 notSet = False
@@ -1317,13 +1320,13 @@ if __name__ == '__main__':
         for i in range(0,g_signal_residual.GetN()):
             N = g_signal_residual.GetY()[i]
             binWidth = g_signal_residual.GetEXlow()[i] + g_signal_residual.GetEXhigh()[i]
-            if g_signal_residual.GetX()[i]<=float(mass)*0.75:
+            if g_signal_residual.GetX()[i]<=float(mass)*0.1:
                 g_signal_residual.SetPoint(i,firstX,firstY)
             else:
                 g_signal_residual.SetPoint(i, g_signal_residual.GetX()[i], N)
             g_signal_residual.SetPointEYlow(i, 0)
             g_signal_residual.SetPointEYhigh(i, 0)
-            if g_signal_residual.GetX()[i]>float(mass)*1.25:
+            if g_signal_residual.GetX()[i]>float(mass)*3.5:
                 g_signal_residual.SetPoint(i,lastX,lastY)
             else:
                 lastX = g_signal_residual.GetX()[i]

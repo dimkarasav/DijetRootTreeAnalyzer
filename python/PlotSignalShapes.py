@@ -99,8 +99,8 @@ if __name__ == '__main__':
         shapeFiles['jesDown'] = signalFileName[model].replace('.root','_JESDOWN.root')
         shapes.append('jer')
         shapeFiles['jerUp'] = signalFileName[model].replace('.root','_JERUP.root')
-        #shapeFiles['jerDown'] = signalFileName[model].replace('.root','_JERDOWN.root')
-        shapeFiles['jerDown'] = signalFileName[model].replace('.root','.root')
+        shapeFiles['jerDown'] = signalFileName[model].replace('.root','_JERDOWN.root')
+        #shapeFiles['jerDown'] = signalFileName[model].replace('.root','.root')
     
 
         histos = {}
@@ -130,7 +130,7 @@ if __name__ == '__main__':
                     histo.SetLineColor(lineColor[model])
                     histo.SetLineStyle(lineStyle[model])
                     histo.SetLineWidth(1)
-                    histo.GetXaxis().SetRangeUser(0,1.49*int(massPoint))
+                    histo.GetXaxis().SetRangeUser(150,2.49*int(massPoint))
                     histo.SetMaximum(1.2*histo.GetBinContent(histo.GetMaximumBin()))
                     histo.GetYaxis().SetTitleOffset(1.5)
                     histo.GetYaxis().SetLabelSize(0.04)
@@ -178,7 +178,7 @@ if __name__ == '__main__':
 
         for shape in shapes:
             histos[shape][0].Draw("c")
-            histos[shape][0].GetXaxis().SetRangeUser(0,1.49*int(massPoint))
+            histos[shape][0].GetXaxis().SetRangeUser(150,1.49*int(massPoint))
             for histo in histos[shape][1:]:
                 histo.Draw("csame")
 
@@ -218,13 +218,13 @@ if __name__ == '__main__':
         c.Print(options.outDir+"/signal_%s_%s.C"%(model,shape))
 
         
-    for shape in shapes:
-        histosByModel['gaus'][shape][0].Draw("c")
-        for model in reversed(models):
-            histosByModel[model][shape][0].Draw("csame")
-            histosByModel[model][shape][0].GetXaxis().SetRangeUser(0,1.49*int(massPoint))
-            for histo in histosByModel[model][shape][1:]:
-                histo.Draw("csame")
+    #for shape in shapes:
+        #histosByModel['gaus'][shape][0].Draw("c")
+        #for model in reversed(models):
+            #histosByModel[model][shape][0].Draw("csame")
+            #histosByModel[model][shape][0].GetXaxis().SetRangeUser(0,1.49*int(massPoint))
+            #for histo in histosByModel[model][shape][1:]:
+                #histo.Draw("csame")
                 
         tLeg = rt.TLegend(0.52,0.6,0.89,0.89)
         tLeg.SetLineColor(rt.kWhite)
