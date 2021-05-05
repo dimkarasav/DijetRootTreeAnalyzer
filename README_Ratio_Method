@@ -1,0 +1,79 @@
+
+
+Note: You can choose another cmmsw version with no problem most likely
+
+cmsrel CMSSW_8_0_24 
+cd CMSSW_8_0_24/src
+
+git clone -b Ratio_Method https://github.com/dimkarasav/DijetRootTreeAnalyzer.git CMSDIJET/DijetRootTreeAnalyzer
+
+cd CMSDIJET/DijetRootTreeAnalyzer
+
+
+
+In the directory C_scripts you can find the scripts to create the Ratio method inputs as well as the Data vs prediction plot.
+
+
+The inputs to these scripts are the so called "small trees" which have the same format as the reduced trees but only save the events that pass our selection criteria.
+In principle these codes could run with reduced trees as inputs with minor modifications.
+The MC small trees additionally contain the weight information as an extra variable with respect to the reduced trees.
+
+
+1) Make_MC_histos.C
+
+	Input: 
+	i) MC small tree (or reduced trees with minor modifications)
+	Output:
+	ii)  .root with the histograms of the dijet mass in SR, CRmiddle, CRhigh for MC in 1GeV and the standard dijet binning.
+
+
+
+2) create_Ratio_Method_inputs.C
+
+	Input: 
+	i)Output of step 1.
+	ii) small tree for data
+
+	Output: 
+	 .root with the histograms of the dijet mass in SR, CRmiddle, CRhigh for MC and data in 1GeV and the standard dijet binning.
+	The ratios are also saved. This script requires as input
+
+
+3) Make_RM_Prediction.C
+
+	Inputs:
+	i) Output of step 2.
+	ii) small tree for data.
+
+	Output: .root with the histograms of:
+		i)   the dijet mass in SR, CRmiddle, CRhigh ffor data in 1GeV and the standard dijet binning.
+		ii)  the ratio method prediction in 1GeV and the standard dijet binning
+		iii) SR/CRhigh ratios for data and MC
+		iv)  CRmiddle/CRhigh ratio for MC
+		v)   Double ratio between data and MC for SR/CRhigh
+		vi)  Fit of the double ratio
+
+4) Make_Histo_of_Standard_Fit.C
+
+	(This script requires to enter the integral of the data in the SR at line 92 by hand.)
+	Inputs:
+	i)  .root produced by the BinnedFit.py script (eg DijetFitResults_PFDijet2016.root)
+
+	Outputs: .root with the fit result saved as a histogram (this is only used for plotting purposes in the next step).
+
+
+5) Plot_RM_vs_data.C
+
+Inputs: 
+i) Output of step 3
+ii) Output of step 4
+iii) 3 Signal templates 
+
+Output: 
+
+i) .png and pdf of RM prediction vs Standard Fit vs Data + pulls. Signal templates are also shown.
+
+
+
+
+
