@@ -80,5 +80,19 @@ i) .png and pdf of RM prediction vs Standard Fit vs Data + pulls. Signal templat
 
 
 
+=========================== Instructions to calculate limits & significances with the combine tool and make the Brazilian flag plots ================================
 
+Go to the DijetRootTreeAnalyzer directory.
+
+cmsenv
+./bash_scripts/Get_inputs.sh # take signal templates from eos
+
+
+#run for narrow resonances
+./bash_scripts/Ratio_method_limits_significances_simultaneous_fit.sh
+
+#run for wide resonances
+./bash_scripts/Ratio_method_limits_significances_simultaneous_fit_Wide_resonances.sh
+
+Edit these bash scripts to define output directory, resonance mass range , etc..
 
