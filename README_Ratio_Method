@@ -2,12 +2,17 @@
 
 Note: You can choose another cmmsw version with no problem most likely
 
-cmsrel CMSSW_8_0_24 
-cd CMSSW_8_0_24/src
+cmsrel CMSSW_8_1_0 
+cd CMSSW_8_1_0/src
 
 git clone -b Ratio_Method https://github.com/dimkarasav/DijetRootTreeAnalyzer.git CMSDIJET/DijetRootTreeAnalyzer
+git clone -b dijetpdf_81X https://github.com/RazorCMS/HiggsAnalysis-CombinedLimit HiggsAnalysis/CombinedLimit
 
-cd CMSDIJET/DijetRootTreeAnalyzer
+cd HiggsAnalysis/CombinedLimit
+cmsenv
+scram b -j 4
+
+cd ../../CMSDIJET/DijetRootTreeAnalyzer
 
 
 
