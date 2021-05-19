@@ -98,9 +98,33 @@ Edit these bash scripts to define output directory, resonance mass range , etc..
 
 Note: The limits are produced for rMax=100 for all masses,widths and final states. This value is too large for some cases resulting into wrong values (especially for the observed limits). Make sure by checking the brazilian flag plots that the distributions look healthy or that by changing the rMax value to a smaller value you get the same result.
 
+========================= Stitching results from Fit method && Ratio method =================================== 
+
+In the EXO-19-012 we used two different approaches to estimate the background (Fit method & Ratio method )and hence each method had distinct limit outputs.
+The published results used the fit Method for results up to 3 TeV of resonance mass and the ratio method above that. 
+Each method produces for each final state a .root file (eg. "xsecUL_Asymptotic_qq_PFDijet2017MC.root") with the limit/significance values per resonance mass. 
+
+We use these 2 files from each method and produce a new one with the same format that has the Fit_method results up to 3TeV and the ratio method ones above that and "feed" that into the plotting scripts.
+
+
+Instructions on how to get results with the fit method can be found at README_caloscouting_analysis.md .
+
+
+
+cd C_scripts/
+   
+root -l Stitch_limits.C
+root -l Stitch_significances.C
+
+Edit these scripts to point to the correct directories/files with the fit method and ratio method results and also the output directory with the stitched results.
+
+
+
 =========================== Instructions to make plots for coupling limit & wide resonance limits superimposed ================================
 
 Note: Some input/output directories are hardcoded in these scripts. Edit them to point to the correct directory with the combine outputs.
+
+Note2: If you need the "stiched results" from both the Ratio and the fit method look step above.
 
 cd C_scripts/Wide_resonance_scripts/
 
