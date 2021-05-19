@@ -150,6 +150,38 @@ root -l AllWidthObs_PlotPFDijetDMV_qq_1D_spin2.C
 
  
 
+=========================== Instructions to make additional published plots ================================
+
+cd C_scripts/
+
+1) Fig 8 - Superimposed significances plot
+
+Superimposed_Significances.C
+
+Inputs:
+ xsecUL_ProfileLikelihood_....root from Fit Method (output of GetCombine.py)
+ xsecUL_ProfileLikelihood_....root from Ratio Method (output of GetCombine.py)
+
+Output: .png + .pdf
+
+
+2) Additonal material : Limit ratios for various widths betweeh Fit method and Ratio method
+
+Superimposing_Ratios_Width_Comparison_spin_1.C 
+Superimposing_Ratios_Width_Comparison_spin_2.C
+
+Inputs: 
+ limits_freq_....root from Fit Method  (output of Plot1DLimit_deta1p1.py)
+ limits_freq_....root from Ratio Method  (output of Plot1DLimit_deta1p1.py)
+
+Output: .png + .pdf
+
+3) Fig 9 - Superimposed signal templates
+
+root -l Signal_shapes_plot_paper.C
+
+
+
 
 
 
