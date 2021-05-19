@@ -96,3 +96,39 @@ cmsenv
 
 Edit these bash scripts to define output directory, resonance mass range , etc..
 
+Note: The limits are produced for rMax=100 for all masses,widths and final states. This value is too large for some cases resulting into wrong values (especially for the observed limits). Make sure by checking the brazilian flag plots that the distributions look healthy or that by changing the rMax value to a smaller value you get the same result.
+
+=========================== Instructions to make plots for coupling limit & wide resonance limits superimposed ================================
+
+Note: Some input/output directories are hardcoded in these scripts. Edit them to point to the correct directory with the combine outputs.
+
+cd C_scripts/Wide_resonance_scripts/
+
+
+
+1) Make coupling limit plots for gq and gq'.
+
+root -l Produce_coupling_txt.C 
+
+root -l Coupling_limit_vs_width.C
+python wide_plot_gq.py
+
+root -l Coupling_limit_vs_width_Prime.C 
+python wide_plot_gqPrime.py
+
+
+2) Plot xsec observed limits for various resonance widths
+
+
+root -l AllWidthObs_PlotPFDijetDMV_qq_1D_spin1.C 
+
+root -l AllWidthObs_PlotPFDijetDMV_qq_1D_spin2.C 
+
+ 
+
+
+
+
+
+
+
