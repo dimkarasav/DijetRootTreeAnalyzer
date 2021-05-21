@@ -1,0 +1,7 @@
+/eos/cms/store/group/phys_jetmet/dimitris/UL2016_data_bigtrees_rerun/APV/runD/JetHT/crab_JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD/210308_132114//0000/JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD_967.root
+/eos/cms/store/group/phys_jetmet/dimitris/UL2016_data_bigtrees_rerun/APV/runD/JetHT/crab_JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD/210308_132114//0000/JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD_968.root
+/eos/cms/store/group/phys_jetmet/dimitris/UL2016_data_bigtrees_rerun/APV/runD/JetHT/crab_JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD/210308_132114//0000/JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD_969.root
+/eos/cms/store/group/phys_jetmet/dimitris/UL2016_data_bigtrees_rerun/APV/runD/JetHT/crab_JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD/210308_132114//0000/JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD_970.root
+/eos/cms/store/group/phys_jetmet/dimitris/UL2016_data_bigtrees_rerun/APV/runD/JetHT/crab_JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD/210308_132114//0000/JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD_971.root
+/eos/cms/store/group/phys_jetmet/dimitris/UL2016_data_bigtrees_rerun/APV/runD/JetHT/crab_JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD/210308_132114//0000/JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD_972.root
+/eos/cms/store/group/phys_jetmet/dimitris/UL2016_data_bigtrees_rerun/APV/runD/JetHT/crab_JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD/210308_132114//0000/JetHT__Run2016D-21Feb2020_UL2016_HIPM-v1__MINIAOD_973.root

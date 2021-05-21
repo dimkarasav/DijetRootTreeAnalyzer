@@ -38,6 +38,8 @@ public :
 private :
   double bTagEventWeight(const vector<double>& SFsForBTaggedJets, const unsigned int nBTags);
   void fillTriggerPlots(TH1F* h_mjj_HLTpass[], double MJJWide);
+  int getBin(double x, double boundaries[]);
+  bool getJetID(int era, bool LepVeto, double eta, double cm, double nm, double nemf, double cemf, double nhf, double chf, double muf );
 
   ClusterSequencePtr  fjClusterSeq, fjClusterSeq_shift;
   JetDefPtr           fjJetDefinition;
