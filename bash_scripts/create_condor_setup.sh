@@ -39,7 +39,7 @@ done
 	fi
 
 
-	echo "executable              = produce_reduced_trees.sh" 															>> "$log_directory"/condor_setup_job_"$list_No".sub
+	echo "executable              = bash_scripts/produce_reduced_trees.sh" 															>> "$log_directory"/condor_setup_job_"$list_No".sub
 	echo "output                  = "$log_directory"/log_"$list_No"/Output.\$(ClusterId).\$(ProcId).out" 				>> "$log_directory"/condor_setup_job_"$list_No".sub
 	echo "error                  = "$log_directory"/log_"$list_No"/Error.\$(ClusterId).\$(ProcId).err"					>> "$log_directory"/condor_setup_job_"$list_No".sub
 	echo "log                  = "$log_directory"/log_"$list_No"/Log.\$(ClusterId).\$(ProcId).log" 						>> "$log_directory"/condor_setup_job_"$list_No".sub

@@ -68,7 +68,7 @@ Architecture="slc6_amd64_gcc630"                                                
 
 4) Run the "Submit_many_condor_jobs.sh" script
 
-./Submit_many_condor_jobs.sh -i 0 -f 30 -dir /eos/cms/store/user/dkarasav/JetHT_Run2018-reReco_reduced_trees/JetHT__Run2018A-17Sep2018-v1__MINIAOD/ -log_dir Condor_Outputs/logs_JetHT__Run2018A-17Sep2018-v1__MINIAOD -job_time tomorrow
+./bash_scripts/Submit_many_condor_jobs.sh -i 0 -f 30 -dir /eos/cms/store/user/dkarasav/JetHT_Run2018-reReco_reduced_trees/JetHT__Run2018A-17Sep2018-v1__MINIAOD/ -log_dir Condor_Outputs/logs_JetHT__Run2018A-17Sep2018-v1__MINIAOD -job_time tomorrow
 
 Explanation of arguments: 
 
