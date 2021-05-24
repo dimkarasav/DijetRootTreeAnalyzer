@@ -47,14 +47,13 @@ void btbdijets_MC_no_vs_withJetID_recalcJetID()
  {
 
 
-	char analyzer_path[300] = "/afs/cern.ch/work/d/dkarasav/public/CMSSW_10_1_5/src/CMSDIJET/DijetRootTreeAnalyzer/"; 
+	char analyzer_path[300] = "/afs/cern.ch/work/d/dkarasav/public/JetID_method_rep/CMSSW_10_1_5/src/CMSDIJET/DijetRootTreeAnalyzer/"; 
 	char output_directory[300] = "UL_datasets_JetID/UL_2016/PUPPI/APV/MC_no_vs_with_JetID/";     
 	char image_name[300] = "PFJet200_pT0_200"; 
 
 	// full name to MC reduced.root would be: /eos/cms/store/group/phys_jetmet/dimitris/QCD_UL16APV_btb_PUPPI_reduced/Pt_30to50_QCD_TuneCP5_13TeV_pythia8_UL16_btb_reduced_skim.root
 	char MC_path_start[300] = "/eos/cms/store/group/phys_jetmet/dimitris/QCD_UL16APV_btb_PUPPI_reduced/Pt_";
 	char MC_path_end[300]   = "_QCD_TuneCP5_13TeV_pythia8_UL16_btb_reduced_skim.root";
-
 
 	char legend_1[300] = "no_JetID";
 	char legend_2[300] = "with_JetID";
@@ -67,7 +66,7 @@ void btbdijets_MC_no_vs_withJetID_recalcJetID()
 	bool test_run = false; //if 'true' the script will loop only over the first 1000 entries. Option for tests.
 	double lumi = 59800;
 	double pTcutLow = 0;
-	double pTcutHigh = 200;
+	double pTcutHigh = 30000;
 
 	double yBnd[eta_bins+1]={0.0,0.5,1.0,1.5,2.0,2.4, 2.7, 3.0,5.0};
 //	double yBnd[eta_bins+1]={2.6, 2.7};
@@ -187,10 +186,8 @@ void btbdijets_MC_no_vs_withJetID_recalcJetID()
 		//h_ptJet1_with[h]->Sumw2();
 	}
 	
-
 	TH2D *h_eta_phi_map = new TH2D("h_eta_phi_map", "eta-phi map", 30 , -5, 5, 12 , -3.1416,3.1416);
 	TH2D *h_eta_phi_map_with = new TH2D("h_eta_phi_map_with", "eta-phi map", 30 , -5, 5, 12 , -3.1416,3.1416);
-
 
 	double passHLT, passHLT1, passHLT2, passHLT3, passHLT4, nVtx, met_ov_sumet;
 	bool JetID_2016_j1, JetID_2017_j1, JetID_2018_j1, JetID_2016_j2, JetID_2017_j2, JetID_2018_j2;
@@ -219,14 +216,12 @@ void btbdijets_MC_no_vs_withJetID_recalcJetID()
 
 	char input_directory[300];
 
-	for(int fl=6; fl<15; fl++)
+	for(int fl=1; fl<15; fl++)
 	{ 
 
-		strcpy(input_directory,"/eos/cms/store/group/phys_jetmet/dimitris/QCD_UL16APV_btb_PUPPI_reduced/Pt_");
+		strcpy(input_directory,MC_path_start);
 		strcat(input_directory,PtHatBin[fl]);		
-		char file_name[200];
-		sprintf(file_name,"_QCD_TuneCP5_13TeV_pythia8_UL16_btb_reduced_skim.root");
-		strcat(input_directory,file_name);
+		strcat(input_directory,MC_path_end);
 		f1 = TFile::Open(input_directory,"READ");
 	    TH1D *h_Nev = (TH1D*)f1->Get("DijetFilter/EventCount/EventCounter");
 	    int Nev = h_Nev->GetBinContent(2);
@@ -240,14 +235,12 @@ void btbdijets_MC_no_vs_withJetID_recalcJetID()
 	cout << " Total number of events: " << Ntotal << endl;
 
 
-	for(Int_t fl=6;fl<15;fl++)
+	for(Int_t fl=1;fl<15;fl++)
 	{  
 
-		strcpy(input_directory,"/eos/cms/store/group/phys_jetmet/dimitris/QCD_UL16APV_btb_PUPPI_reduced/Pt_");
-		strcat(input_directory,PtHatBin[fl]);
-		char file_name[200];
-		sprintf(file_name,"_QCD_TuneCP5_13TeV_pythia8_UL16_btb_reduced_skim.root");
-		strcat(input_directory,file_name);
+		strcpy(input_directory,MC_path_start);
+		strcat(input_directory,PtHatBin[fl]);		
+		strcat(input_directory,MC_path_end);
 		f1 = TFile::Open(input_directory,"READ");
 		TTree *tree = (TTree*)f1->Get("rootTupleTree/tree");
 
