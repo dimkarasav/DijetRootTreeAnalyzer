@@ -11,6 +11,8 @@ Number_of_root_files=$(wc -l < temporary_file_with_paths.txt)
 #echo $work
 #echo "$list_No"
 
+current_path=$(pwd)
+
 if [ "$Number_of_root_files" -eq "0" ]
 then
 	echo " "
@@ -27,7 +29,7 @@ filename="temporary_file_with_paths.txt"
 while read -r line; do
     name="\"$line\""
 
-	root -l -q "/afs/cern.ch/work/d/dkarasav/public/CMSSW_10_1_5/src/CMSDIJET/DijetRootTreeAnalyzer/Open_and_close_root_file.C("$name")" &>> temp_file_of_stdout.txt #Opens and closes each root file in the directory and writes in a txt file the terminal output.
+	root -l -q "$current_path/bash_scripts/Open_and_close_root_file.C("$name")" &>> temp_file_of_stdout.txt #Opens and closes each root file in the directory and writes in a txt file the terminal output.
 
 done < "$filename"
 
@@ -38,7 +40,7 @@ if [  -z "$Output_of_grep" ];  #true if the variable is empty
 then
 	echo "All files were closed correctly! Good job! "
 	echo ""
-	echo "\ (•◡•) /"
+	echo "\ (•◡ •) /"
 fi
 if [  -n "$Output_of_grep" ]; #true if variable is non-empty
 then

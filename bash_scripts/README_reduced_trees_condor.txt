@@ -1,5 +1,8 @@
 
-This is a README to: 1) create fast lists for big trees, 2)submit condor jobs in order to produce reduced trees for Data and MC. 3) check outputs for trees that did not close correctly
+This is a README to: 
+1) create small lists for big tree inputs.
+2)submit condor jobs in order to produce reduced trees for Data and MC.
+3) check outputs, for trees that did not close correctly.
 
 
 
@@ -8,12 +11,12 @@ You must already have a CMSSW release installed and make sure that the analyzer 
 
 ######################################### Create big tree lists ####################
 
-./create_small_lists.sh -path /eos/cms/store/group/phys_exotica/dijet/Dijet13TeV/magda/Run2017E-09Aug2019_UL2017-v1/JetHT/crab_JetHT__Run2017E-09Aug2019_UL2017-v1__MINIAOD/191028_095603/ -dir lists/UL_2017_data/ -name UL_2017_RunE -size 50
+./bash_scripts/create_small_lists.sh -path /eos/cms/store/group/phys_exotica/dijet/Dijet13TeV/magda/Run2017E-09Aug2019_UL2017-v1/JetHT/crab_JetHT__Run2017E-09Aug2019_UL2017-v1__MINIAOD/191028_095603/ -dir lists/UL_2017_data/ -name UL_2017_RunE -size 50
 
 
 #########################################################################################################################################
 
-This is a README to submit to condor jobs in order to produce reduced trees. The first part is for Data and the second  for MC.
+This is a README to submit jobs in HT condor in order to produce reduced trees. The first part is for Data and the second for MC.
 
 You must already have a CMSSW release installed and make sure that the analyzer is running without errors - lists, config files, analyzers all are assumed to be ready.
 
@@ -22,22 +25,13 @@ You must already have a CMSSW release installed and make sure that the analyzer 
 
 !!!!!Important NOTE: for data, you need to have a different .txt cutfile for each run so that condor gets the correct JSON files. 
 
-1) Copy the following files in the DijetRootTreeAnalyzer directory of your CMSSW release: 
-
-  
-/afs/cern.ch/work/d/dkarasav/public/Condor_scripts/produce_reduced_trees.sh
-/afs/cern.ch/work/d/dkarasav/public/Condor_scripts/create_condor_setup.sh
-/afs/cern.ch/work/d/dkarasav/public/Condor_scripts/create_list_config.sh
-/afs/cern.ch/work/d/dkarasav/public/Condor_scripts/Submit_many_condor_jobs.sh
-/afs/cern.ch/work/d/dkarasav/public/Condor_scripts/Run_reduced_trees_locally.sh
-
 Everything from now on will assume you are on the DijetRootTreeAnalyzer directory of your CMSSW release.
 
-2) Make a directory named "Condor_Outputs" to store the log files of condor jobs.
+1) Make a directory named "Condor_Outputs" to store the log files of condor jobs.
 
 mkdir Condor_Outputs
 
-3) Set up the config information in the script "create_list_config.sh"
+2) Set up the config information in the script "bas_scripts/create_list_config.sh"
 
 Open the script. Inside it there are some config variables to be set for each big tree set.
 
@@ -66,7 +60,7 @@ Architecture="slc6_amd64_gcc630"                                                
 
 
 
-4) Run the "Submit_many_condor_jobs.sh" script
+3) Run the "bash_scripts/Submit_many_condor_jobs.sh" script
 
 ./bash_scripts/Submit_many_condor_jobs.sh -i 0 -f 30 -dir /eos/cms/store/user/dkarasav/JetHT_Run2018-reReco_reduced_trees/JetHT__Run2018A-17Sep2018-v1__MINIAOD/ -log_dir Condor_Outputs/logs_JetHT__Run2018A-17Sep2018-v1__MINIAOD -job_time tomorrow
 
@@ -78,7 +72,7 @@ Explanation of arguments:
  -log_dir log_file_directory
  -job_time 'condor keyword for maximum time of job'
 
- choices for keywords are: 
+ choices for "job_time" keywords are: 
 	espresso     = 20 minutes
 	microcentury = 1 hour
 	longlunch    = 2 hours
@@ -94,12 +88,12 @@ In this example lists from 0 to 30 will be produced and the output reduced trees
 The log files can be found at Condor_Outputs/logs_JetHT__Run2018A-17Sep2018-v1__MINIAOD
 
 
-5) To make sure that the code will run you can use the "Run_reduced_trees_locally.sh" to  run 1 list locally to see if everything is ok.
+4) To make sure that the code will run you can use the "bash_scripts/Run_reduced_trees_locally.sh" to  run one list locally to see if everything is ok.
 
 
 	Run the script as follows:
  
-./Run_reduce_trees_localy.sh -i 1 -dir local_run_test/ -log_dir Condor_Outputs/local_run/ 
+./bash_scripts/Run_reduce_trees_localy.sh -i 1 -dir local_run_test/ -log_dir Condor_Outputs/local_run/ 
 
 This will run the defined list 1, and save the output on the "local_run_test" local directory. The configs will be found on Condor_Outputs/local_run/ directory.
 
@@ -109,23 +103,16 @@ This will run the defined list 1, and save the output on the "local_run_test" lo
 
 ====================================================== for MC big trees ======================================================
 
-The idea is basically the same, but you can use pThat Bins inputs now. 
+The idea is basically the same, but you can use pThat Bins arguments now. 
 
-1) Find the scripts
-
-/afs/cern.ch/work/d/dkarasav/public/Condor_scripts/produce_reduced_trees.sh
-/afs/cern.ch/work/d/dkarasav/public/Condor_scripts/create_condor_setup.sh
-/afs/cern.ch/work/d/dkarasav/public/Condor_scripts/create_list_config_MC.sh
-/afs/cern.ch/work/d/dkarasav/public/Condor_scripts/Submit_many_condor_jobs_MC.sh
-/afs/cern.ch/work/d/dkarasav/public/Condor_scripts/Run_reduced_trees_locally_MC.sh
 
 Everything from now on will assume you are on the DijetRootTreeAnalyzer directory of your CMSSW release.
 
-2) Make a directory named "Condor_Outputs" to store the log files of condor jobs.
+1) Make a directory named "Condor_Outputs" to store the log files of condor jobs.
 
 mkdir Condor_Outputs
 
-3) Set up the config information in the script "create_list_config_MC.sh"
+2) Set up the config information in the script "create_list_config_MC.sh"
 
 Set the configuration just like on data case, with one difference ( needs optimization ): 
 
@@ -141,17 +128,17 @@ The lists names are not set on the start, but in the line 64.
 
 
 
-4) Run the "Submit_many_condor_jobs_MC.sh" script
+3) Run the "Submit_many_condor_jobs_MC.sh" script
 
-./Submit_many_condor_jobs_MC.sh -i 1 -f 2 -pT_bin_low 50 -pT_bin_high 80 -dir /afs/cern.ch/work/d/dkarasav/public/Analyzer/CMSSW_9_4_0/src/CMSDIJET/DijetRootTreeAnalyzer/deleteme/ -log_dir Condor_Outputs/testing -job_time tomorrow
+./bash_scripts/Submit_many_condor_jobs_MC.sh -i 1 -f 2 -pT_bin_low 50 -pT_bin_high 80 -dir /afs/cern.ch/work/d/dkarasav/public/Analyzer/CMSSW_9_4_0/src/CMSDIJET/DijetRootTreeAnalyzer/deleteme/ -log_dir Condor_Outputs/testing -job_time tomorrow
 
 
-5) To make sure that the code will run you can use the "Run_reduced_trees_locally_MC.sh" to  run 1 list locally to see if everything is ok.
+4) To make sure that the code will run you can use the "Run_reduced_trees_locally_MC.sh" to  run 1 list locally to see if everything is ok.
 
 	
 	Run the script as follows: 
 
-./Run_reduce_trees_localy_MC.sh -i 1 -dir deleteme/ -log_dir Condor_Outputs/hoho/ -pT_bin_low 170 -pT_bin_high 300
+./bash_scripts/Run_reduce_trees_localy_MC.sh -i 1 -dir deleteme/ -log_dir Condor_Outputs/hoho/ -pT_bin_low 170 -pT_bin_high 300
 
 
 
@@ -159,12 +146,12 @@ The lists names are not set on the start, but in the line 64.
 
 ====================================================== check reduced trees for trees that did not close correctly ======================================================
 
-I have created a script that checks automatically all the reduced trees in a directory to spot any files that trees did not close correctly. 
+Sometimes the output reduced_skim.root files do not "close" correctly and they become unreadable. 
+This script checks automatically all the reduced trees in a directory to spot any files that trees did not close correctly. 
 
 Just do: 
 
-./check_reduced_trees.sh /eos/cms/store/group/phys_jetmet/dimitris/Autumn18_Puppi_btb_reduced_AK8/ 
-
+./bash_scripts/check_reduced_trees.sh /eos/cms/store/group/phys_jetmet/dimitris/Autumn18_Puppi_btb_reduced_AK8/ 
 
 If some trees did not close you will see the warnings printed in the terminal. If all trees were closed succesfully you will see a corresponding message for success.
 
